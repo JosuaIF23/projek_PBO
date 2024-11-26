@@ -5,22 +5,246 @@
 package view;
 import java.awt.BasicStroke;
 import javax.swing.border.StrokeBorder;
-//import javax.swing.JScrollPane;
+import java.awt.Color;
+import java.awt.GradientPaint;
+import java.awt.Graphics;
+
+import javax.swing.JPanel;
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
+import javax.swing.JComponent;
+import java.awt.RenderingHints;
+import java.awt.Graphics2D;
+import javax.swing.plaf.basic.BasicButtonUI;
+import javax.swing.*;
+import java.awt.*;
+
+
 /**
  *
  * @author firen
  */
 public class UI_TRUE extends javax.swing.JFrame {
+private JPanel createCard(String text) {
+    JPanel card = new JPanel();
+    card.setLayout(new BorderLayout());
+    card.setBackground(Color.WHITE);
+    card.setPreferredSize(new Dimension(200, 150)); // Ukuran tetap untuk card
+    card.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+
+    // Tambahkan label ke kartu
+    JLabel label = new JLabel(text, SwingConstants.CENTER);
+    label.setFont(new Font("Arial", Font.BOLD, 16));
+    card.add(label, BorderLayout.CENTER);
+
+    return card;
+}
+
+private void initializeGridPanel() {
+    // Bersihkan isi jPanel4
+    jPanel4.removeAll();
+    jPanel4.setLayout(new BorderLayout());
+
+    // Panel grid untuk menampilkan card
+    JPanel gridPanel = new JPanel();
+    int totalData = 50; // Jumlah card
+    int columns = 3; // Jumlah kolom per baris
+    int rows = (int) Math.ceil((double) totalData / columns); // Hitung jumlah baris berdasarkan jumlah card
+
+    gridPanel.setLayout(new GridLayout(rows, columns, 10, 10)); // Grid dengan jarak antar card
+    gridPanel.setBackground(Color.LIGHT_GRAY);
+
+    // Tambahkan card ke gridPanel
+    for (int i = 0; i < totalData; i++) {
+        gridPanel.add(createCard("Card " + (i + 1)));
+    }
+
+    // Atur PreferredSize untuk gridPanel agar scroll muncul
+    int cardHeight = 150; // Tinggi card (sama dengan PreferredSize)
+    int cardWidth = 200;  // Lebar card
+    int verticalSpacing = 10; // Jarak vertikal antar card
+    int horizontalSpacing = 10; // Jarak horizontal antar card
+
+    int gridHeight = (cardHeight + verticalSpacing) * rows;
+    int gridWidth = (cardWidth + horizontalSpacing) * columns;
+
+    gridPanel.setPreferredSize(new Dimension(gridWidth, gridHeight));
+
+    // Tambahkan gridPanel ke JScrollPane
+    JScrollPane scrollPane = new JScrollPane(gridPanel);
+    scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER); // Nonaktifkan scroll horizontal
+    scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED); // Aktifkan scroll vertikal
+    scrollPane.getVerticalScrollBar().setUnitIncrement(16); // Scroll lebih halus
+
+    // Tambahkan JScrollPane ke jPanel4
+    jPanel4.add(scrollPane, BorderLayout.CENTER);
+
+    // Validasi ulang jPanel4
+    jPanel4.revalidate();
+    jPanel4.repaint();
+}
+
 
     /**
      * Creates new form UI_TRUE
      */
     public UI_TRUE() {
         initComponents();
+
+    initializeGridPanel();
+    
+    
 jPanel7.setBorder(javax.swing.BorderFactory.createCompoundBorder(
     javax.swing.BorderFactory.createTitledBorder("Search Your Jobs"),
     javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED)
 ));
+
+
+
+
+        // Gradasi untuk jPanel1: Horizontal (Ungu pastel terang ke ungu medium)
+        addGradientBackgroundHorizontal(jPanel1, new Color(221, 160, 221), new Color(186, 85, 211));
+
+        // Gradasi untuk jPanel2: Horizontal (Ungu pastel medium ke ungu medium terang)
+        addGradientBackgroundHorizontal(jPanel2, new Color(225, 150, 211), new Color(167, 90, 219));
+
+        // Gradasi untuk jPanel6: Biru muda ke hijau laut
+        addGradientBackground(jPanel6, new Color(225, 150, 211), new Color(225, 150, 211));
+
+        // Gradasi untuk jPanel7 tetap: Magenta ke biru cerah
+        addGradientBackground(jPanel7, Color.MAGENTA, Color.CYAN);
+
+
+        jPanel7.setBorder(BorderFactory.createTitledBorder("Search Your Jobs"));
+    }
+
+    /**
+
+     */
+    private void addGradientBackground(javax.swing.JPanel panel, Color startColor, Color endColor) {
+        panel.setOpaque(false);
+
+        panel.setUI(new javax.swing.plaf.PanelUI() {
+            @Override
+            public void paint(Graphics g, javax.swing.JComponent c) {
+                Graphics2D g2d = (Graphics2D) g;
+                int width = panel.getWidth();
+                int height = panel.getHeight();
+                GradientPaint gradient = new GradientPaint(0, 0, startColor, 0, height, endColor);
+
+                g2d.setPaint(gradient);
+                g2d.fillRect(0, 0, width, height);
+                super.paint(g, c);
+            }
+        });
+        panel.repaint();
+    }
+
+    /**
+
+     */
+    private void addGradientBackgroundHorizontal(javax.swing.JPanel panel, Color startColor, Color endColor) {
+        panel.setOpaque(false);
+
+        panel.setUI(new javax.swing.plaf.PanelUI() {
+            @Override
+            public void paint(Graphics g, javax.swing.JComponent c) {
+                Graphics2D g2d = (Graphics2D) g;
+                int width = panel.getWidth();
+                int height = panel.getHeight();
+                GradientPaint gradient = new GradientPaint(0, 0, startColor, width, 0, endColor);
+
+                g2d.setPaint(gradient);
+                g2d.fillRect(0, 0, width, height);
+                super.paint(g, c);
+            }
+        });
+        panel.repaint();
+
+JButton[] buttons = {jButton1, jButton2, jButton3, jButton4, jButton5, jButton6, jButton7, jButton8, jButton9, jButton10};
+for (JButton button : buttons) {
+    button.setContentAreaFilled(true);  // Isi area konten tombol
+    button.setBorderPainted(true);     // Aktifkan border tombol
+    button.setOpaque(true);            // Tombol tidak transparan
+    button.setBackground(new Color(135, 206, 250)); // Latar biru muda
+    button.setForeground(Color.WHITE);             // Warna teks putih
+    button.setFont(new java.awt.Font("Arial", java.awt.Font.BOLD, 14)); // Font tombol
+    button.setBorder(BorderFactory.createLineBorder(new Color(0, 0, 150), 2)); // Border biru tua
+
+    // Efek hover (opsional)
+    button.addMouseListener(new java.awt.event.MouseAdapter() {
+        @Override
+        public void mouseEntered(java.awt.event.MouseEvent evt) {
+            button.setBackground(new Color(100, 149, 237)); // Warna hover
+        }
+
+        @Override
+        public void mouseExited(java.awt.event.MouseEvent evt) {
+            button.setBackground(new Color(135, 206, 250)); // Warna default
+        }
+    });
+    }
+
+
+
+
+
+
+//            // Frame utama
+//            JFrame frame = new JFrame("Grid Layout with Scroll");
+//            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//            frame.setSize(800, 600);
+//
+//            // Panel grid yang akan menampilkan data
+//            JPanel gridPanel = new JPanel();
+//            gridPanel.setLayout(new GridLayout(0, 3, 10, 10)); // 3 kolom, baris otomatis
+//            gridPanel.setBackground(Color.LIGHT_GRAY);
+//
+//            // Tambahkan data simulasi
+//            int totalData = 1; // Ubah jumlah data di sini untuk mencoba
+//            for (int i = 0; i < totalData; i++) {
+//                gridPanel.add(createCard("Card " + (i + 1))); // Data
+//            }
+//
+//            // Tambahkan placeholder jika jumlah data tidak memenuhi grid (opsional)
+//            int totalSlots = 12; // Total slot pada grid untuk membuat grid tetap seragam
+//            for (int i = totalData; i < totalSlots; i++) {
+//                gridPanel.add(createPlaceholderCard());
+//            }
+//            // Tambahkan JScrollPane untuk scroll vertikal
+//            JScrollPane scrollPane = new JScrollPane(gridPanel);
+//            scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER); // Nonaktifkan scroll horizontal
+//            scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED); // Aktifkan scroll vertikal
+//            scrollPane.getVerticalScrollBar().setUnitIncrement(16); // Scroll lebih halus
+//
+//            // Tambahkan JScrollPane ke frame
+//            frame.add(scrollPane);
+//            frame.setVisible(true);
+//        }
+//
+//        // Metode untuk membuat kartu data
+//        private static JPanel createCard(String text) {
+//            JPanel card = new JPanel();
+//            card.setLayout(new BorderLayout());
+//            card.setBackground(Color.WHITE);
+//            card.setPreferredSize(new Dimension(200, 150));
+//            card.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+//
+//            // Tambahkan label ke kartu
+//            JLabel label = new JLabel(text, SwingConstants.CENTER);
+//            label.setFont(new Font("Arial", Font.BOLD, 16));
+//            card.add(label, BorderLayout.CENTER);
+//
+//            return card;
+//        }
+//
+//        // Metode untuk membuat placeholder yang tidak terlihat
+//        private static JPanel createPlaceholderCard() {
+//            JPanel placeholder = new JPanel();
+//            placeholder.setPreferredSize(new Dimension(200, 150));
+//            placeholder.setBackground(Color.LIGHT_GRAY); // Warna sama dengan background gridPanel
+//            placeholder.setBorder(BorderFactory.createEmptyBorder()); // Hapus border
+//            return placeholder;
 
 
 
@@ -58,14 +282,14 @@ jPanel7.setBorder(javax.swing.BorderFactory.createCompoundBorder(
         jLabel5 = new javax.swing.JLabel();
         jPanel7 = new javax.swing.JPanel();
         jTextField6 = new javax.swing.JTextField();
-        jComboBox36 = new javax.swing.JComboBox<>();
-        jComboBox37 = new javax.swing.JComboBox<>();
-        jComboBox38 = new javax.swing.JComboBox<>();
-        jComboBox39 = new javax.swing.JComboBox<>();
-        jComboBox40 = new javax.swing.JComboBox<>();
-        jComboBox41 = new javax.swing.JComboBox<>();
+        jComboBox1 = new javax.swing.JComboBox<>();
+        jComboBox2 = new javax.swing.JComboBox<>();
+        jComboBox3 = new javax.swing.JComboBox<>();
+        jComboBox4 = new javax.swing.JComboBox<>();
+        jComboBox5 = new javax.swing.JComboBox<>();
+        jComboBox6 = new javax.swing.JComboBox<>();
         jLabel30 = new javax.swing.JLabel();
-        jComboBox42 = new javax.swing.JComboBox<>();
+        jComboBox7 = new javax.swing.JComboBox<>();
         jLabel31 = new javax.swing.JLabel();
         jPanel4 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
@@ -73,22 +297,24 @@ jPanel7.setBorder(javax.swing.BorderFactory.createCompoundBorder(
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
 
-        jPanel1.setBackground(new java.awt.Color(78, 36, 213));
+        jPanel1.setBackground(new java.awt.Color(204, 201, 255));
         jPanel1.setPreferredSize(new java.awt.Dimension(1440, 900));
 
         LoginPic4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/new_resized_for_netbeans.png"))); // NOI18N
         LoginPic4.setText(" ");
 
+        userName4.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         userName4.setForeground(new java.awt.Color(255, 255, 255));
         userName4.setText("USername akan tampil disini");
 
-        jPanel2.setBackground(new java.awt.Color(77, 71, 195));
+        jPanel2.setBackground(new java.awt.Color(213, 197, 255));
         jPanel2.setForeground(new java.awt.Color(153, 153, 153));
 
+        jLabel2.setBackground(new java.awt.Color(153, 136, 236));
         jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/359c236d-b709-491c-b040-87d6b31ef95f.png"))); // NOI18N
         jLabel2.setText(" ");
 
-        jLabel3.setBackground(new java.awt.Color(107, 34, 242));
+        jLabel3.setBackground(new java.awt.Color(153, 151, 246));
         jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/auotApply.png"))); // NOI18N
         jLabel3.setText(" ");
         jLabel3.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -100,7 +326,7 @@ jPanel7.setBorder(javax.swing.BorderFactory.createCompoundBorder(
 
         jPanel5.setPreferredSize(new java.awt.Dimension(1440, 150));
 
-        jPanel6.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel6.setBackground(new java.awt.Color(210, 178, 255));
         jPanel6.setPreferredSize(new java.awt.Dimension(1440, 140));
 
         jButton1.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
@@ -161,7 +387,7 @@ jPanel7.setBorder(javax.swing.BorderFactory.createCompoundBorder(
         jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/Green Modern and Minimalistic Travel Typography Logo (164 x 44 piksel).png"))); // NOI18N
         jLabel5.setVerifyInputWhenFocusTarget(false);
 
-        jPanel7.setBackground(new java.awt.Color(255, 255, 238));
+        jPanel7.setBackground(new java.awt.Color(204, 204, 255));
 
         jTextField6.setText("jobs,department,.........");
         jTextField6.addActionListener(new java.awt.event.ActionListener() {
@@ -170,39 +396,44 @@ jPanel7.setBorder(javax.swing.BorderFactory.createCompoundBorder(
             }
         });
 
-        jComboBox36.setFont(new java.awt.Font("Segoe UI", 3, 12)); // NOI18N
-        jComboBox36.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "tingkat pengalaman" }));
+        jComboBox1.setFont(new java.awt.Font("Segoe UI", 3, 12)); // NOI18N
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "tingkat pengalaman" }));
 
-        jComboBox37.setFont(new java.awt.Font("Segoe UI", 3, 12)); // NOI18N
-        jComboBox37.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Jenis Loker" }));
+        jComboBox2.setFont(new java.awt.Font("Segoe UI", 3, 12)); // NOI18N
+        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Jenis Loker" }));
 
-        jComboBox38.setFont(new java.awt.Font("Segoe UI", 3, 12)); // NOI18N
-        jComboBox38.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Tipe" }));
-        jComboBox38.addActionListener(new java.awt.event.ActionListener() {
+        jComboBox3.setFont(new java.awt.Font("Segoe UI", 3, 12)); // NOI18N
+        jComboBox3.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Tipe" }));
+        jComboBox3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jComboBox38jComboBox10ActionPerformed(evt);
+                jComboBox3jComboBox10ActionPerformed(evt);
             }
         });
 
-        jComboBox39.setFont(new java.awt.Font("Segoe UI", 3, 12)); // NOI18N
-        jComboBox39.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Fasilitas" }));
+        jComboBox4.setFont(new java.awt.Font("Segoe UI", 3, 12)); // NOI18N
+        jComboBox4.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Fasilitas" }));
 
-        jComboBox40.setFont(new java.awt.Font("Segoe UI", 3, 12)); // NOI18N
-        jComboBox40.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Lokasi" }));
+        jComboBox5.setFont(new java.awt.Font("Segoe UI", 3, 12)); // NOI18N
+        jComboBox5.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Lokasi" }));
 
-        jComboBox41.setFont(new java.awt.Font("Segoe UI", 3, 12)); // NOI18N
-        jComboBox41.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Gajian" }));
-        jComboBox41.addActionListener(new java.awt.event.ActionListener() {
+        jComboBox6.setFont(new java.awt.Font("Segoe UI", 3, 12)); // NOI18N
+        jComboBox6.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Gajian" }));
+        jComboBox6.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jComboBox41jComboBox13ActionPerformed(evt);
+                jComboBox6jComboBox13ActionPerformed(evt);
             }
         });
 
         jLabel30.setFont(new java.awt.Font("Segoe UI", 3, 12)); // NOI18N
         jLabel30.setText("ShrotBye");
 
-        jComboBox42.setFont(new java.awt.Font("Segoe UI", 3, 12)); // NOI18N
-        jComboBox42.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Paling Relevan" }));
+        jComboBox7.setFont(new java.awt.Font("Segoe UI", 3, 12)); // NOI18N
+        jComboBox7.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Paling Relevan" }));
+        jComboBox7.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBox7ActionPerformed(evt);
+            }
+        });
 
         jLabel31.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/resized_new_image_44x33.png"))); // NOI18N
         jLabel31.setText(" ");
@@ -223,19 +454,19 @@ jPanel7.setBorder(javax.swing.BorderFactory.createCompoundBorder(
             .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanel7Layout.createSequentialGroup()
                     .addGap(85, 85, 85)
-                    .addComponent(jComboBox36, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGap(32, 32, 32)
-                    .addComponent(jComboBox37, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGap(28, 28, 28)
-                    .addComponent(jComboBox39, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jComboBox4, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGap(40, 40, 40)
-                    .addComponent(jComboBox38, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jComboBox3, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGap(36, 36, 36)
-                    .addComponent(jComboBox41, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jComboBox6, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGap(18, 18, 18)
-                    .addComponent(jComboBox40, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jComboBox5, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGap(115, 115, 115)
-                    .addComponent(jComboBox42, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jComboBox7, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addContainerGap(94, Short.MAX_VALUE)))
         );
         jPanel7Layout.setVerticalGroup(
@@ -252,13 +483,13 @@ jPanel7.setBorder(javax.swing.BorderFactory.createCompoundBorder(
                 .addGroup(jPanel7Layout.createSequentialGroup()
                     .addGap(55, 55, 55)
                     .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jComboBox37, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jComboBox36, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jComboBox38, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jComboBox39, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jComboBox40, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jComboBox42, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jComboBox41, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jComboBox3, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jComboBox4, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jComboBox5, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jComboBox7, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jComboBox6, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addContainerGap(18, Short.MAX_VALUE)))
         );
 
@@ -272,7 +503,7 @@ jPanel7.setBorder(javax.swing.BorderFactory.createCompoundBorder(
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 660, Short.MAX_VALUE)
+            .addGap(0, 383, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
@@ -309,7 +540,7 @@ jPanel7.setBorder(javax.swing.BorderFactory.createCompoundBorder(
                 .addGap(633, 633, 633)
                 .addComponent(jLabel5)
                 .addGap(0, 0, Short.MAX_VALUE))
-            .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, 1440, Short.MAX_VALUE)
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -319,34 +550,33 @@ jPanel7.setBorder(javax.swing.BorderFactory.createCompoundBorder(
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton7, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton8, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton9, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton10, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jButton7, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jButton8, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jButton9, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jButton10, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, 383, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
         jPanel5Layout.setHorizontalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
+            .addGroup(jPanel5Layout.createSequentialGroup()
                 .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel5Layout.createSequentialGroup()
-                .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, 913, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, 636, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
@@ -357,9 +587,7 @@ jPanel7.setBorder(javax.swing.BorderFactory.createCompoundBorder(
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, 636, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 14, Short.MAX_VALUE))
+            .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, 636, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
@@ -386,7 +614,8 @@ jPanel7.setBorder(javax.swing.BorderFactory.createCompoundBorder(
                         .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, 650, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, 636, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(14, 14, 14))
         );
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/Logo_resized_97x63.png"))); // NOI18N
@@ -411,12 +640,14 @@ jPanel7.setBorder(javax.swing.BorderFactory.createCompoundBorder(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(userName4)
-                    .addComponent(LoginPic4, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(userName4)
+                        .addComponent(LoginPic4, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 825, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(14, 14, 14))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -459,13 +690,17 @@ jPanel7.setBorder(javax.swing.BorderFactory.createCompoundBorder(
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextField6jTextField2ActionPerformed
 
-    private void jComboBox38jComboBox10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox38jComboBox10ActionPerformed
+    private void jComboBox3jComboBox10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox3jComboBox10ActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jComboBox38jComboBox10ActionPerformed
+    }//GEN-LAST:event_jComboBox3jComboBox10ActionPerformed
 
-    private void jComboBox41jComboBox13ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox41jComboBox13ActionPerformed
+    private void jComboBox6jComboBox13ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox6jComboBox13ActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jComboBox41jComboBox13ActionPerformed
+    }//GEN-LAST:event_jComboBox6jComboBox13ActionPerformed
+
+    private void jComboBox7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox7ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jComboBox7ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -514,13 +749,13 @@ jPanel7.setBorder(javax.swing.BorderFactory.createCompoundBorder(
     private javax.swing.JButton jButton7;
     private javax.swing.JButton jButton8;
     private javax.swing.JButton jButton9;
-    private javax.swing.JComboBox<String> jComboBox36;
-    private javax.swing.JComboBox<String> jComboBox37;
-    private javax.swing.JComboBox<String> jComboBox38;
-    private javax.swing.JComboBox<String> jComboBox39;
-    private javax.swing.JComboBox<String> jComboBox40;
-    private javax.swing.JComboBox<String> jComboBox41;
-    private javax.swing.JComboBox<String> jComboBox42;
+    private javax.swing.JComboBox<String> jComboBox1;
+    private javax.swing.JComboBox<String> jComboBox2;
+    private javax.swing.JComboBox<String> jComboBox3;
+    private javax.swing.JComboBox<String> jComboBox4;
+    private javax.swing.JComboBox<String> jComboBox5;
+    private javax.swing.JComboBox<String> jComboBox6;
+    private javax.swing.JComboBox<String> jComboBox7;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
